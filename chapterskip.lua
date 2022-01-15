@@ -68,16 +68,16 @@ function chapterskip(_, current)
                 skip = i
             end
         elseif skip then
-            mp.set_property("time-pos", chapter.time)
+            mp.set_property("pause","yes")
             skipped[skip] = true
             return
         end
     end
     if skip then
         if mp.get_property_native("playlist-count") == mp.get_property_native("playlist-pos-1") then
-            return mp.set_property("time-pos", mp.get_property_native("duration"))
+            return mp.set_property("pause","yes")
         end
-        mp.commandv("playlist-next")
+        mp.commandv("pause")
     end
 end
 
