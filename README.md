@@ -1,18 +1,18 @@
 # chapterskip
-Automatically skips chapters based on title.
+Automatically pauses chapters based on title.
 
 ## Installation
-Place chapterskip.lua in your mpv `scripts` folder.
+Place chapterpause.lua in your mpv `scripts` folder.
 
 ## Usage
-Select which categories to skip with `script-opts=chapterskip-skip=opening;ending;more;categories` in your `mpv.conf`  
+Select which categories to skip with `script-opts=chapterpause-pause=opening;ending;more;categories` in your `mpv.conf`  
 The default categories are:
 - prologue
 - opening
 - ending
 - preview
 
-Additional categories can be defined with `categories=my-new-category>Part [AB]/Ending 1; another-category>Part C` in `script-opts/chapterskip.conf`
+Additional categories can be defined with `categories=my-new-category>Part [AB]/Ending 1; another-category>Part C` in `script-opts/chapterpause.conf`
 
 ## Category syntax
 List of `category name>slash-separated lua patterns`, separated by semicolons.  
