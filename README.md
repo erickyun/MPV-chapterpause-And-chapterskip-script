@@ -1,4 +1,4 @@
-# chapterskip
+# chapterpause
 Automatically pauses chapters based on title.
 
 ## Installation
