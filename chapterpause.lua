@@ -1,8 +1,8 @@
--- chapterskip.lua
+-- chapterpause.lua
 --
 -- Ain't Nobody Got Time for That
 --
--- This script skips chapters based on their title.
+-- This script pauses chapters based on their title.
 
 local categories = {
     prologue = "^Prologue/^Intro",
@@ -13,15 +13,15 @@ local categories = {
 
 local options = {
     enabled = true,
-    skip_once = true,
+    pause_once = true,
     categories = "",
-    skip = ""
+    pause = ""
 }
 
 mp.options = require "mp.options"
 
 function matches(i, title)
-    for category in string.gmatch(options.skip, " *([^;]*[^; ]) *") do
+    for category in string.gmatch(options.pause, " *([^;]*[^; ]) *") do
         if categories[category:lower()] then
             if string.find(category:lower(), "^idx%-") == nil then
                 if title then
@@ -42,11 +42,11 @@ function matches(i, title)
     end
 end
 
-local skipped = {}
+local paused = {}
 local parsed = {}
 
-function chapterskip(_, current)
-    mp.options.read_options(options, "chapterskip")
+function chapterpause(_, current)
+    mp.options.read_options(options, "chapterpause")
     if not options.enabled then return end
     for category in string.gmatch(options.categories, "([^;]+)") do
         name, patterns = string.match(category, " *([^+>]*[^+> ]) *[+>](.*)")
@@ -58,22 +58,22 @@ function chapterskip(_, current)
         parsed[category] = true
     end
     local chapters = mp.get_property_native("chapter-list")
-    local skip = false
+    local pause = false
     for i, chapter in ipairs(chapters) do
-        if (not options.skip_once or not skipped[i]) and matches(i, chapter.title) then
-            if i == current + 1 or skip == i - 1 then
-                if skip then
-                    skipped[skip] = true
+        if (not options.pause_once or not paused[i]) and matches(i, chapter.title) then
+            if i == current + 1 or pause == i - 1 then
+                if pause then
+                    paused[pause] = true
                 end
-                skip = i
+                pause = i
             end
-        elseif skip then
+        elseif pause then
             mp.set_property("pause","yes")
-            skipped[skip] = true
+            paused[pause] = true
             return
         end
     end
-    if skip then
+    if pause then
         if mp.get_property_native("playlist-count") == mp.get_property_native("playlist-pos-1") then
             return mp.set_property("pause","yes")
         end
@@ -81,5 +81,5 @@ function chapterskip(_, current)
     end
 end
 
-mp.observe_property("chapter", "number", chapterskip)
-mp.register_event("file-loaded", function() skipped = {} end)
+mp.observe_property("chapter", "number", chapterpause)
+mp.register_event("file-loaded", function() paused = {} end)
